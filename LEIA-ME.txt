@@ -1,0 +1,16 @@
+MY HOME — INSTALAÇÃO PELO CELULAR
+
+Este pacote é um PWA (aplicativo web instalável), não um APK.
+Para instalar no Android, os arquivos precisam estar publicados em um endereço HTTPS.
+
+Opção sugerida: GitHub Pages
+1. No Chrome do celular, entre em https://github.com e crie uma conta ou entre.
+2. Crie um repositório público chamado my-home.
+3. Use Add file > Upload files e envie os 5 arquivos desta pasta (index.html, manifest.webmanifest, sw.js, icon-192.png, icon-512.png).
+4. Faça Commit changes.
+5. No repositório, Settings > Pages.
+6. Em Build and deployment, escolha Deploy from a branch; Branch: main; Folder: / (root); Save.
+7. Aguarde a publicação. O endereço será https://SEU-USUARIO.github.io/my-home/
+8. Abra esse endereço no Chrome Android, menu ⋮ > Instalar app ou Adicionar à tela inicial.
+
+Os dados são salvos localmente no navegador/aplicativo. Não limpe os dados do site nem desinstale sem exportar backup.

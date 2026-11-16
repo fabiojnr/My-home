@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101828">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>My Home</title>
+<style>
+:root{--bg:#101828;--panel:#19263b;--panel2:#22324a;--text:#f4f7fb;--muted:#a8b5c8;--accent:#8db7ff;--green:#74d6a2;--line:#30415b;--red:#ff9292}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px system-ui,-apple-system,Segoe UI,sans-serif;padding:0 0 34px}
+header{padding:24px 19px 18px;background:linear-gradient(145deg,#1d3150,#101828);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:13px}.logo{width:48px;height:48px;border-radius:16px;background:#314d78;display:grid;place-items:center;font-size:25px}
+h1{font-size:25px;margin:0;letter-spacing:-.5px}.sub{color:var(--muted);font-size:12px;margin-top:3px}
+main{padding:16px;max-width:760px;margin:auto}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px}
+.small{font-size:12px;color:var(--muted)}.big{font-size:22px;font-weight:750;margin-top:5px;letter-spacing:-.5px}
+.progress{height:7px;background:#31415a;border-radius:20px;overflow:hidden;margin-top:10px}.bar{height:100%;background:var(--green);width:0}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:22px 0 11px}.section-head h2{font-size:17px;margin:0}
+button{border:0;border-radius:12px;padding:11px 14px;font-weight:650;background:var(--accent);color:#102039;font-size:13px}
+button.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}button.danger{background:#4a2934;color:#ffd6dc}
+input,select,textarea{width:100%;background:#101c2d;color:var(--text);border:1px solid var(--line);border-radius:11px;padding:11px;font:14px system-ui;outline:none}
+label{display:block;color:var(--muted);font-size:12px;margin:10px 0 5px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.formgrid .full{grid-column:1/-1}
+.item{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:13px;margin:9px 0}
+.itemtop{display:flex;align-items:flex-start;gap:10px}.itemname{font-weight:700;flex:1}.meta{font-size:12px;color:var(--muted);margin-top:4px}
+.item.done{opacity:.65}.item.done .itemname{text-decoration:line-through}
+.itemprices{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.itemprices div{background:#101c2d;border-radius:10px;padding:9px}.itemprices b{display:block;margin-top:3px;font-size:13px}
+.actions{display:flex;gap:7px;justify-content:flex-end;margin-top:10px}.actions button{padding:8px 10px}
+.check{width:21px;height:21px;accent-color:#74d6a2}
+.hidden{display:none!important}.muted{color:var(--muted)}.empty{text-align:center;padding:24px;color:var(--muted)}
+footer{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}
+@media(min-width:600px){main{padding:22px}.itemsgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.item{margin:0}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">⌂</div><div><h1>My Home</h1><div class="sub">Sua casa, organizada do seu jeito.</div></div></div></header>
+<main>
+<section class="stats">
+ <div class="card"><div class="small">Total já gasto</div><div class="big" id="spent">R$ 0,00</div></div>
+ <div class="card"><div class="small">Itens comprados</div><div class="big" id="count">0/0</div></div>
+</section>
+<section class="panel" style="margin-top:10px">
+ <div class="small">Meu orçamento (R$)</div><input id="budget" type="number" min="0" step="0.01" placeholder="Ex.: 2000" style="margin-top:7px">
+ <div style="display:flex;justify-content:space-between;margin-top:10px"><span class="small">Saldo do orçamento</span><b id="remaining">R$ 0,00</b></div>
+ <div class="progress"><div class="bar" id="bar"></div></div>
+</section>
+<div class="section-head"><h2>Minha lista</h2><button onclick="toggleForm()">＋ Adicionar item</button></div>
+<section class="panel hidden" id="form">
+ <h3 style="margin:0 0 8px">Novo item</h3>
+ <div class="formgrid">
+  <div class="full"><label>Nome do item</label><input id="name" placeholder="Ex.: Geladeira"></div>
+  <div><label>Cômodo</label><select id="category"><option>Quarto</option><option>Cozinha</option><option>Banheiro</option><option>Sala</option><option>Limpeza</option><option>Lavanderia</option><option>Outros</option></select></div>
+  <div><label>Quantidade</label><input id="qty" type="number" min="1" value="1"></div>
+  <div><label>Preço estimado por unidade</label><input id="estimate" type="number" min="0" step=".01" placeholder="0,00"></div>
+  <div><label>Preço pago por unidade</label><input id="paid" type="number" min="0" step=".01" placeholder="0,00"></div>
+  <div class="full"><label>Observações</label><textarea id="note" rows="2" placeholder="Usado, novo, medidas, estado..."></textarea></div>
+ </div>
+ <footer><button onclick="saveItem()">Salvar item</button><button class="secondary" onclick="toggleForm()">Cancelar</button></footer>
+</section>
+<div class="section-head"><h2>Itens cadastrados</h2><span class="small" id="pending"></span></div>
+<label for="filter">Filtrar por cômodo</label><select id="filter" onchange="render()"><option>Todos</option><option>Quarto</option><option>Cozinha</option><option>Banheiro</option><option>Sala</option><option>Limpeza</option><option>Lavanderia</option><option>Outros</option></select>
+<div id="items" class="itemsgrid"></div>
+<section class="panel" style="margin-top:17px">
+ <h3 style="margin:0 0 12px">Resumo financeiro</h3>
+ <div style="display:flex;justify-content:space-between;margin:7px 0"><span class="small">Estimativa total</span><b id="estimatedTotal">R$ 0,00</b></div>
+ <div style="display:flex;justify-content:space-between;margin:7px 0"><span class="small">Valor efetivamente gasto</span><b id="paidTotal">R$ 0,00</b></div>
+ <div style="display:flex;justify-content:space-between;margin:7px 0"><span class="small">Itens pendentes</span><b id="pendingTotal">0</b></div>
+</section>
+<footer><button class="secondary" onclick="exportData()">Exportar backup</button><button class="secondary" onclick="document.getElementById('importFile').click()">Importar backup</button><input id="importFile" class="hidden" type="file" accept="application/json" onchange="importData(event)"></footer>
+<p class="small" style="text-align:center;margin-top:18px">Seus dados ficam salvos neste aparelho.</p>
+</main>
+<script>
+const KEY='myhome_v1_items', BKEY='myhome_v1_budget';
+let items=[];
+try{items=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){items=[]}
+const $=id=>document.getElementById(id);
+const num=v=>Math.max(0,Number(v)||0);
+const brl=v=>num(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+function persist(){localStorage.setItem(KEY,JSON.stringify(items));localStorage.setItem(BKEY,$('budget').value);render()}
+$('budget').value=localStorage.getItem(BKEY)||'2000';
+$('budget').addEventListener('input',()=>{localStorage.setItem(BKEY,$('budget').value);render()});
+function toggleForm(){$('form').classList.toggle('hidden')}
+function saveItem(){
+ const name=$('name').value.trim();if(!name){alert('Digite o nome do item.');return}
+ items.push({id:Date.now(),name,category:$('category').value,qty:Math.max(1,parseInt($('qty').value)||1),estimate:num($('estimate').value),paid:num($('paid').value),note:$('note').value.trim(),done:false});
+ ['name','estimate','paid','note'].forEach(x=>$(x).value='');$('qty').value='1';$('form').classList.add('hidden');persist()
+}
+function update(id,field,value){items=items.map(x=>x.id===id?{...x,[field]:value}:x);persist()}
+function removeItem(id){if(confirm('Excluir este item da lista?')){items=items.filter(x=>x.id!==id);persist()}}
+function editItem(id){
+ const x=items.find(i=>i.id===id);if(!x)return;
+ const n=prompt('Nome do item:',x.name);if(n===null)return;
+ const note=prompt('Observações:',x.note||'');if(note===null)return;
+ x.name=n.trim()||x.name;x.note=note;persist()
+}
+function render(){
+ const filter=$('filter').value;const visible=items.filter(x=>filter==='Todos'||x.category===filter);
+ $('items').innerHTML=visible.length?visible.map(x=>`<article class="item ${x.done?'done':''}">
+ <div class="itemtop"><input class="check" type="checkbox" ${x.done?'checked':''} onchange="update(${x.id},'done',this.checked)"><div class="itemname">${esc(x.name)}<div class="meta">${esc(x.category)} · Quantidade: ${x.qty}</div></div></div>
+ <div class="itemprices"><div><span class="small">Estimado/un.</span><b>${brl(x.estimate)}</b></div><div><span class="small">Pago/un.</span><b>${brl(x.paid)}</b></div></div>
+ ${x.note?`<div class="meta" style="margin-top:9px">${esc(x.note)}</div>`:''}
+ <div class="actions"><button class="secondary" onclick="editItem(${x.id})">Editar</button><button class="danger" onclick="removeItem(${x.id})">Excluir</button></div></article>`).join(''):'<div class="empty">Nenhum item por aqui. Toque em “Adicionar item” para começar.</div>';
+ const spent=items.reduce((s,x)=>s+x.paid*x.qty,0),estimate=items.reduce((s,x)=>s+x.estimate*x.qty,0),done=items.filter(x=>x.done).length,budget=num($('budget').value);
+ $('spent').textContent=brl(spent);$('count').textContent=done+'/'+items.length;$('remaining').textContent=brl(budget-spent);
+ $('remaining').style.color=budget-spent<0?'#ff9292':'#74d6a2';$('bar').style.width=(budget?Math.min(100,spent/budget*100):0)+'%';
+ $('estimatedTotal').textContent=brl(estimate);$('paidTotal').textContent=brl(spent);$('pendingTotal').textContent=items.length-done;$('pending').textContent=(items.length-done)+' pendentes';
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function exportData(){const data={app:'My Home',version:1,budget:$('budget').value,items};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-home-backup.json';a.click();URL.revokeObjectURL(a.href)}
+function importData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.items))throw Error();items=d.items;$('budget').value=d.budget||'2000';persist();alert('Backup importado!')}catch(err){alert('Não foi possível ler esse backup.')}};r.readAsText(f);e.target.value=''}
+render();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+</script>
+</body></html>
